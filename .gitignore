@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# LaTeX auxiliary files
+*.aux
+*.out
