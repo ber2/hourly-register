@@ -30,6 +30,7 @@ def dates_off():
 @fixture
 def hourly_config(worker, company, dates_off):
     return HourlyConfig(
+        year=2020,
         month=7,
         working_hours=[9, 13, 14, 18],
         worker=worker,
@@ -133,6 +134,7 @@ def test_dates_off():
 def test_hourly_config(worker, company, dates_off):
 
     hc = HourlyConfig(
+        year=2020,
         month=7,
         working_hours=[9, 13, 14, 18],
         worker=worker,
@@ -140,6 +142,7 @@ def test_hourly_config(worker, company, dates_off):
         dates_off=dates_off,
     )
 
+    assert hc.year == 2020
     assert hc.month == 7
     assert hc.working_hours == [9, 13, 14, 18]
     assert hc.worker == worker
@@ -149,6 +152,7 @@ def test_hourly_config(worker, company, dates_off):
 
     with raises(ValueError):
         HourlyConfig(
+            year=2020,
             month=0,
             working_hours=[9, 13, 14, 18],
             worker=worker,
@@ -158,6 +162,7 @@ def test_hourly_config(worker, company, dates_off):
 
     with raises(ValueError):
         HourlyConfig(
+            year=2020,
             month=7,
             working_hours=[9, 14, 18],
             worker=worker,
@@ -167,6 +172,7 @@ def test_hourly_config(worker, company, dates_off):
 
     with raises(ValueError):
         HourlyConfig(
+            year=2020,
             month=7,
             working_hours=[9, 13, 14, 24],
             worker=worker,
