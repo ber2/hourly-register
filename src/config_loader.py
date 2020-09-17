@@ -99,6 +99,7 @@ class DatesOff:
 
 @dataclass
 class HourlyConfig:
+    year: 2020
     month: int
     working_hours: List[int]
     worker: Worker
@@ -120,7 +121,8 @@ def load_config(filename: Path) -> HourlyConfig:
     with open(filename, "r") as fp:
         config = yaml.safe_load(fp)
 
-    return HourlyConfig(config["month"],
+    return HourlyConfig(config["year"],
+                        config["month"],
                         config["working hours"],
                         Worker(**config["worker"]),
                         Company(**config["company"]),
