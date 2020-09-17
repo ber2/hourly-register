@@ -1,0 +1,28 @@
+worker:
+  name: "The Guy"
+  dni: "12345678A"
+  ss_n:
+    - "08"
+    - "12345678"
+    - "15"
+company:
+  name: "The Boss"
+  workplace: "Home"
+  cif: "A12345678"
+  ccc:
+    - "08"
+    - "12345678"
+    - "15"
+dates off:
+  weekdays:
+    - 6
+    - 7
+  holidays:
+    - 11
+    - 24
+month: 7
+working hours:
+  - 9
+  - 13
+  - 14
+  - 18
