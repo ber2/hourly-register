@@ -2,69 +2,37 @@ from pathlib import Path
 
 from pytest import fixture, raises
 
-from src.config_loader import valid_document, valid_ss_n, InvalidDocument
-from src.config_loader import Worker, Company, DatesOff, HourlyConfig, load_config
+from src.config_loader import is_valid_cif, is_valid_dni, is_valid_ss_n, InvalidDocument
+from src.config_loader import Worker, Company, DatesOff, ReportData, load_config
 
 
-def test_stupid():
-    assert True
+def test_is_valid_dni():
 
-
-@fixture
-def worker():
-    return Worker(name="The Guy", dni="12345678A", ss_n=["08", "12345678", "15"])
-
-
-@fixture
-def company():
-    return Company(
-        name="The Boss", workplace="Home", cif="A12345678", ccc=["08", "12345678", "15"]
-    )
-
-
-@fixture
-def dates_off():
-    return DatesOff(weekdays=[6, 7], holidays=[11, 24])
-
-
-@fixture
-def hourly_config(worker, company, dates_off):
-    return HourlyConfig(
-        year=2020,
-        month=7,
-        working_hours=[9, 13, 14, 18],
-        worker=worker,
-        company=company,
-        dates_off=dates_off,
-    )
+    assert is_valid_dni("12345678A")
+    assert not is_valid_dni("123A567A")
+    assert not is_valid_dni("123456789A")
+    assert not is_valid_dni("123456789AB")
 
 
 def test_valid_document():
 
-    assert valid_document("12345678A", "dni")
-    assert not valid_document("123A567A", "dni")
-    assert not valid_document("123456789A", "dni")
-    assert not valid_document("123456789AB", "dni")
-    assert valid_document("X98765432", "cif")
-    assert not valid_document("123A5678", "cif")
-    assert not valid_document("X987654321", "cif")
-
-    with raises(ValueError):
-        valid_document("12345678A", "nni")
+    assert is_valid_cif("X98765432")
+    assert not is_valid_cif("123A5678")
+    assert not is_valid_cif("X987654321")
 
 
 def test_valid_ss_n():
 
-    assert valid_ss_n(["08", "1928182", "15"])
-    assert valid_ss_n(["08", "01928182", "15"])
-    assert not valid_ss_n(["08", "928182", "15"])
-    assert not valid_ss_n(["8", "9228182", "15"])
-    assert not valid_ss_n(["018", "9228182", "15"])
-    assert not valid_ss_n(["18", "928182", "15", "2"])
-    assert not valid_ss_n(["18", "9281832", "152"])
-    assert not valid_ss_n(["18", "92818A2", "15"])
-    assert not valid_ss_n(["1B", "9281832", "15"])
-    assert not valid_ss_n(["15", "9281832", "Z5"])
+    assert is_valid_ss_n(["08", "1928182", "15"])
+    assert is_valid_ss_n(["08", "01928182", "15"])
+    assert not is_valid_ss_n(["08", "928182", "15"])
+    assert not is_valid_ss_n(["8", "9228182", "15"])
+    assert not is_valid_ss_n(["018", "9228182", "15"])
+    assert not is_valid_ss_n(["18", "928182", "15", "2"])
+    assert not is_valid_ss_n(["18", "9281832", "152"])
+    assert not is_valid_ss_n(["18", "92818A2", "15"])
+    assert not is_valid_ss_n(["1B", "9281832", "15"])
+    assert not is_valid_ss_n(["15", "9281832", "Z5"])
 
 
 def test_worker():
@@ -73,6 +41,8 @@ def test_worker():
     assert w.name == "The Guy"
     assert w.dni == "12345678A"
     assert w.ss_n == ["08", "12345678", "15"]
+    assert w.ss_n_repr == "08 / 12345678 / 15"
+    assert w.initials == "TG"
 
     with raises(InvalidDocument):
         Worker(name="The Guy", dni="112345678A", ss_n=["08", "12345678", "15"])
@@ -87,6 +57,7 @@ def test_company():
     assert c.workplace == "Home"
     assert c.cif == "A12345678"
     assert c.ccc == ["08", "12345678", "15"]
+    assert c.ccc_repr == "08 / 12345678 / 15"
 
     with raises(InvalidDocument):
         Company(
@@ -133,9 +104,9 @@ def test_dates_off():
 
 def test_hourly_config(worker, company, dates_off):
 
-    hc = HourlyConfig(
+    hc = ReportData(
         year=2020,
-        month=7,
+        month=9,
         working_hours=[9, 13, 14, 18],
         worker=worker,
         company=company,
@@ -143,15 +114,15 @@ def test_hourly_config(worker, company, dates_off):
     )
 
     assert hc.year == 2020
-    assert hc.month == 7
+    assert hc.month == 9
     assert hc.working_hours == [9, 13, 14, 18]
     assert hc.worker == worker
     assert hc.company == company
     assert hc.dates_off == dates_off
-    assert hc.month_name == "julio"
+    assert hc.month_name == "Septiembre"
 
     with raises(ValueError):
-        HourlyConfig(
+        ReportData(
             year=2020,
             month=0,
             working_hours=[9, 13, 14, 18],
@@ -161,7 +132,7 @@ def test_hourly_config(worker, company, dates_off):
         )
 
     with raises(ValueError):
-        HourlyConfig(
+        ReportData(
             year=2020,
             month=7,
             working_hours=[9, 14, 18],
@@ -171,7 +142,7 @@ def test_hourly_config(worker, company, dates_off):
         )
 
     with raises(ValueError):
-        HourlyConfig(
+        ReportData(
             year=2020,
             month=7,
             working_hours=[9, 13, 14, 24],

@@ -5,21 +5,7 @@ from typing import List, Union, Literal
 
 import yaml
 
-
-MONTH_NAMES = {
-    1: "enero",
-    2: "febrero",
-    3: "marzo",
-    4: "abril",
-    5: "mayo",
-    6: "junio",
-    7: "julio",
-    8: "agosto",
-    9: "septiembre",
-    10: "octubre",
-    11: "noviembre",
-    12: "diciembre"
-}
+from .calendar import MONTH_NAMES
 
 
 Document = Literal["dni", "cif"]
@@ -29,20 +15,19 @@ class InvalidDocument(ValueError):
     pass
 
 
-def valid_document(document: str, doctype: Document) -> bool:
+def is_valid_cif(document:str) -> bool:
     doc_upper = document.upper()
-
-    if doctype == "dni":
-        pattern = re.compile(r"[0-9]{7,8}[A-Z]{1}")
-    elif doctype == "cif":
-        pattern = re.compile(r"[A-Z]{1}[0-9]{7,8}")
-    else:
-        raise ValueError("Unknown document type: %s" % doctype)
-
+    pattern = re.compile(r"[A-Z]{1}[0-9]{7,8}")
     return bool(re.fullmatch(pattern, doc_upper))
 
 
-def valid_ss_n(document: List[str]) -> bool:
+def is_valid_dni(document: str) -> bool:
+    doc_upper = document.upper()
+    pattern = re.compile(r"[0-9]{7,8}[A-Z]{1}")
+    return bool(re.fullmatch(pattern, doc_upper))
+
+
+def is_valid_ss_n(document: List[str]) -> bool:
     pattern_edges = re.compile(r"[0-9]{2}")
     pattern_in = re.compile(r"[0-9]{7,8}")
 
@@ -59,14 +44,18 @@ class Worker:
     name: str
     dni: str
     ss_n: List[str]
+    ss_n_repr: str = field(init=False, repr=False)
+    initials: str = field(init=False, repr=False)
 
     def __post_init__(self):
-        if not valid_document(self.dni, "dni"):
+        if not is_valid_dni(self.dni):
             raise InvalidDocument("Document number %s is not a valid DNI" % self.dni)
-        if not valid_ss_n(self.ss_n):
+        if not is_valid_ss_n(self.ss_n):
             raise InvalidDocument(
                 "Document number %s is not a valid social security number" % self.ss_n
             )
+        self.ss_n_repr = " / ".join(self.ss_n)
+        self.initials = "".join([w[0].upper() for w in self.name.split(" ")])
 
 
 @dataclass
@@ -75,14 +64,17 @@ class Company:
     workplace: str
     cif: str
     ccc: List[str]
+    ccc_repr: str = field(init=False, repr=False)
 
     def __post_init__(self):
-        if not valid_document(self.cif, "cif"):
+        if not is_valid_cif(self.cif):
             raise InvalidDocument("Document number %s is not a valid DNI" % self.cif)
-        if not valid_ss_n(self.ccc):
+        if not is_valid_ss_n(self.ccc):
             raise InvalidDocument(
                 "Document number %s is not a valid social security number" % self.ccc
             )
+        self.ccc_repr = " / ".join(self.ccc)
+
 
 
 @dataclass
@@ -98,7 +90,7 @@ class DatesOff:
 
 
 @dataclass
-class HourlyConfig:
+class ReportData:
     year: 2020
     month: int
     working_hours: List[int]
@@ -114,16 +106,19 @@ class HourlyConfig:
             raise ValueError("Invalid working hours: %s" % str(self.working_hours))
         self.month_name = MONTH_NAMES[self.month]
 
+    def is_working_day(self, day: int) -> bool:
+        return True
 
 
-def load_config(filename: Path) -> HourlyConfig:
+
+def load_config(filename: Path) -> ReportData:
 
     with open(filename, "r") as fp:
         config = yaml.safe_load(fp)
 
-    return HourlyConfig(config["year"],
-                        config["month"],
-                        config["working hours"],
-                        Worker(**config["worker"]),
-                        Company(**config["company"]),
-                        DatesOff(**config["dates off"]))
+    return ReportData(config["year"],
+                      config["month"],
+                      config["working hours"],
+                      Worker(**config["worker"]),
+                      Company(**config["company"]),
+                      DatesOff(**config["dates off"]))
