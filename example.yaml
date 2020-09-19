@@ -1,29 +1,48 @@
-worker:
-  name: "The Guy"
-  dni: "12345678A"
-  ss_n:
-    - "08"
-    - "12345678"
-    - "15"
-company:
-  name: "The Boss"
-  workplace: "Home"
-  cif: "A12345678"
-  ccc:
-    - "08"
-    - "12345678"
-    - "15"
+# Year and month of the report
+year: 2020
+month: 9
+
 dates off:
+  # Label here weekdays which you take off, aka weekends.
+  # Monday is 1, Sunday is 7; leave as it is for usual weekends.
   weekdays:
     - 6
     - 7
+
+  # List of days during which you did not work, away from weekends.
+  # These could be bank holidays or vacations
   holidays:
     - 11
     - 24
-year: 2020
-month: 9
+
+# Hours at which you start work, stop for lunch break, get back to work, and finish.
 working hours:
   - 9
   - 13
   - 14
   - 18
+
+# Details of the worker, aka the person filling the report.
+worker:
+  name: "The Guy"  # Initials will be extracted from here for signature of daily rows
+  dni: "12345678A"  # National ID number
+
+  # Social security number, to be rendered as 
+  # "08 / 12345678 / 15"
+  ss_n:  
+    - "08"
+    - "12345678"
+    - "15"
+
+# Details about your employer
+company:
+  name: "The Boss"  # Company name
+  workplace: "Home"  # Office location
+  cif: "A12345678"  # Company's fiscal number, aka as NIF
+
+  # Código de Cuenta de Cotización, aka, a Company's social security number. To be rendered as:
+  # "08 / 12345678 / 15"
+  ccc:
+    - "08"
+    - "12345678"
+    - "15"
