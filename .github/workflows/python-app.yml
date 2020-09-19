@@ -28,7 +28,7 @@ jobs:
         pip install -r requirements.txt
     - name: Pytest
       run: |
-        pytest -v # --cov=./parser/
+        pytest -v --cov=.
     #- name: MyPy
       #run: |
         #mypy ./parser/
