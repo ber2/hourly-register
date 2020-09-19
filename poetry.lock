@@ -131,8 +131,6 @@ pyrepl = ">=0.8.2"
 
 [[package]]
 category = "dev"
-<<<<<<< Updated upstream
-=======
 description = "the modular source code checker: pep8 pyflakes and co"
 name = "flake8"
 optional = false
