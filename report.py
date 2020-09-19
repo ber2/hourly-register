@@ -28,7 +28,7 @@ from parser import load_config, render
 def main(config_file: str, template: str, output: str) -> None:
 
     config_path = Path(config_file)
-    template = Path(template)
+    template_path = Path(template)
     output_pdf_path = Path(output)
     output_tex_path = Path(output_pdf_path.stem + ".tex")
 
@@ -38,7 +38,7 @@ def main(config_file: str, template: str, output: str) -> None:
     print(
         f"Rendering TeX file using template {template} and writing to {output_tex_path}."
     )
-    render(data, template, output_tex_path)
+    render(data, template_path, output_tex_path)
 
     print(f"Running pdflatex and saving to {output_pdf_path}.")
     os.system(f"pdflatex --interaction nonstopmode {output_tex_path}")

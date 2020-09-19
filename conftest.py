@@ -1,6 +1,6 @@
 from pytest import fixture
 
-from parser.config import Worker, Company, DatesOff, ReportData, load_config
+from parser.config import Worker, Company, DatesOff, ReportData
 
 
 @fixture

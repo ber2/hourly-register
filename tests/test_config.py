@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from pytest import fixture, raises
+from pytest import raises
 
 from parser.config import is_valid_cif, is_valid_dni, is_valid_ss_n, InvalidDocument
 from parser.config import Worker, Company, DatesOff, ReportData, load_config
