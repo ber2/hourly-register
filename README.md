@@ -11,7 +11,7 @@ But, instead of filling up a template, why not write a small YAML file with all 
 information and then letting some code generate a PDF report for you?
 
 In order to do so, we use [Jinja](https://jinja.palletsprojects.com/) in order to generate a
-[LaTeX](https://www.latex-project.org/) file, which can compiled to a PDF file using `pdflatex`.
+[LaTeX](https://www.latex-project.org/) file, which can be compiled to a PDF file using `pdflatex`.
 
 
 ## Setup
