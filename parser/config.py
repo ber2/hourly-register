@@ -6,7 +6,13 @@ from typing import List, Union, Literal
 
 import yaml
 
-from .calendar import MONTH_NAMES, number_of_days_in_month, format_hour, next_month_repr, next_year
+from .calendar import (
+    MONTH_NAMES,
+    number_of_days_in_month,
+    format_hour,
+    next_month_repr,
+    next_year,
+)
 
 
 class InvalidDocument(ValueError):
@@ -123,8 +129,10 @@ class ReportData:
             f"{format_hour(self.working_hours[3])}"
         )
         self.daily_working_hours_count = (
-            self.working_hours[3] - self.working_hours[2]
-            + self.working_hours[1] - self.working_hours[0]
+            self.working_hours[3]
+            - self.working_hours[2]
+            + self.working_hours[1]
+            - self.working_hours[0]
         )
         self.days_in_month = number_of_days_in_month(self.year, self.month)
         self.next_month_repr = next_month_repr(self.month)
@@ -154,12 +162,9 @@ class ReportData:
         return f"{day} & & & & & & & \\\\"
 
     def total_working_hours(self) -> int:
-        working_days = len(list(
-            filter(
-                self.is_working_day,
-                range(1, self.days_in_month + 1)
-            )
-        ))
+        working_days = len(
+            list(filter(self.is_working_day, range(1, self.days_in_month + 1)))
+        )
         return self.daily_working_hours_count * working_days
 
 

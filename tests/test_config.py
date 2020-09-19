@@ -183,7 +183,6 @@ class TestReportData:
         assert report_data.total_working_hours() == 160
 
 
-
 def test_read_config(report_data):
 
     assert load_config(Path("tests/example.yaml")) == report_data

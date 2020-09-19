@@ -1,4 +1,9 @@
-from parser.calendar import number_of_days_in_month, format_hour, next_month_repr, next_year
+from parser.calendar import (
+    number_of_days_in_month,
+    format_hour,
+    next_month_repr,
+    next_year,
+)
 
 
 def test_number_of_days_in_month():
@@ -22,6 +27,7 @@ def test_next_month_repr():
     assert next_month_repr(1) == "febrero"
     assert next_month_repr(7) == "agosto"
     assert next_month_repr(12) == "enero"
+
 
 def test_next_year():
     assert next_year(2020, 12) == 2021

@@ -37,4 +37,3 @@ def next_month_repr(month: int) -> str:
 
 def next_year(year: int, month: int) -> int:
     return year + 1 if month == 12 else year
-
