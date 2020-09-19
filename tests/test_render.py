@@ -6,19 +6,14 @@ from pytest import mark
 from src.render import render
 
 
-@mark.xfail
-def test_render_latex_template(hourly_config):
+def test_render_latex_template(report_data):
 
     template_path = Path("latex/template.tex")
     actual_path = Path("tests/actual_rendered_template.tex")
 
-    # TODO Remove these lines after test passes
-    if os.path.exists(actual_path):
-        os.remove(actual_path)
-
     expected_path = Path("tests/expected_rendered_template.tex")
 
-    render(hourly_config, template_path, actual_path)
+    render(report_data, template_path, actual_path)
 
     with open(actual_path, "r") as f:
         actual = f.read()
@@ -28,5 +23,4 @@ def test_render_latex_template(hourly_config):
 
     assert actual == expected
 
-    # TODO Uncomment below after passing test; use it for diffs
-    # os.remove(actual_path)
+    os.remove(actual_path)

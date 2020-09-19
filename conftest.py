@@ -20,7 +20,7 @@ def dates_off():
 
 
 @fixture
-def hourly_config(worker, company, dates_off):
+def report_data(worker, company, dates_off):
     return ReportData(
         year=2020,
         month=9,

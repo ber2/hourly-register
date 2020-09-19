@@ -102,56 +102,88 @@ def test_dates_off():
         DatesOff(holidays=[40])
 
 
-def test_hourly_config(worker, company, dates_off):
+class TestReportData:
+    def test_init(self, worker, company, dates_off):
 
-    hc = ReportData(
-        year=2020,
-        month=9,
-        working_hours=[9, 13, 14, 18],
-        worker=worker,
-        company=company,
-        dates_off=dates_off,
-    )
-
-    assert hc.year == 2020
-    assert hc.month == 9
-    assert hc.working_hours == [9, 13, 14, 18]
-    assert hc.worker == worker
-    assert hc.company == company
-    assert hc.dates_off == dates_off
-    assert hc.month_name == "Septiembre"
-
-    with raises(ValueError):
-        ReportData(
+        hc = ReportData(
             year=2020,
-            month=0,
+            month=9,
             working_hours=[9, 13, 14, 18],
             worker=worker,
             company=company,
             dates_off=dates_off,
         )
 
-    with raises(ValueError):
-        ReportData(
-            year=2020,
-            month=7,
-            working_hours=[9, 14, 18],
-            worker=worker,
-            company=company,
-            dates_off=dates_off,
-        )
+        assert hc.year == 2020
+        assert hc.month == 9
+        assert hc.days_in_month == 30
+        assert hc.working_hours == [9, 13, 14, 18]
+        assert hc.worker == worker
+        assert hc.company == company
+        assert hc.dates_off == dates_off
+        assert hc.month_name == "Septiembre"
+        assert hc.working_hours_repr == "09:00 & 13:00 & 14:00 & 18:00"
+        assert hc.daily_working_hours_count == 8
+        assert hc.next_month_repr == "octubre"
+        assert hc.next_year == 2020
 
-    with raises(ValueError):
-        ReportData(
-            year=2020,
-            month=7,
-            working_hours=[9, 13, 14, 24],
-            worker=worker,
-            company=company,
-            dates_off=dates_off,
-        )
+        with raises(ValueError):
+            ReportData(
+                year=2020,
+                month=0,
+                working_hours=[9, 13, 14, 18],
+                worker=worker,
+                company=company,
+                dates_off=dates_off,
+            )
+
+        with raises(ValueError):
+            ReportData(
+                year=2020,
+                month=7,
+                working_hours=[9, 14, 18],
+                worker=worker,
+                company=company,
+                dates_off=dates_off,
+            )
+
+        with raises(ValueError):
+            ReportData(
+                year=2020,
+                month=7,
+                working_hours=[9, 13, 14, 24],
+                worker=worker,
+                company=company,
+                dates_off=dates_off,
+            )
+
+    def test_is_working_day(self, report_data):
+
+        assert report_data.is_working_day(3)
+        assert not report_data.is_working_day(5)
+        assert not report_data.is_working_day(11)
+        assert report_data.is_working_day(25)
+
+    def test_format_line(self, report_data):
+
+        d = 3
+        expected = "3 & 09:00 & 13:00 & 14:00 & 18:00 & 8 & 0 & TG \\\\"
+        assert report_data.format_line(d) == expected
+
+        d = 5
+        expected = "5 & & & & & & & \\\\"
+        assert report_data.format_line(d) == expected
+
+        d = 25
+        expected = "25 & 09:00 & 13:00 & 14:00 & 18:00 & 8 & 0 & TG \\\\"
+        assert report_data.format_line(d) == expected
+
+    def test_total_working_hours(self, report_data):
+
+        assert report_data.total_working_hours() == 160
 
 
-def test_read_config(hourly_config):
 
-    assert load_config(Path("tests/example.yaml")) == hourly_config
+def test_read_config(report_data):
+
+    assert load_config(Path("tests/example.yaml")) == report_data
