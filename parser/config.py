@@ -100,7 +100,7 @@ class DatesOff:
 
 @dataclass
 class ReportData:
-    year: 2020
+    year: int
     month: int
     days_in_month: int = field(init=False, repr=False)
     working_hours: List[int]
