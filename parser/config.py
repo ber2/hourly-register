@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 import datetime as dt
 from pathlib import Path
 import re
-from typing import List, Union, Literal
+from typing import List
 
 import yaml
 

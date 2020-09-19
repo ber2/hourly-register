@@ -1,8 +1,6 @@
 import os
 from pathlib import Path
 
-from pytest import mark
-
 from parser.render import render
 
 
