@@ -3,7 +3,7 @@ from pathlib import Path
 
 from pytest import mark
 
-from src.render import render
+from parser.render import render
 
 
 def test_render_latex_template(report_data):

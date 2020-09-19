@@ -1,4 +1,4 @@
-from src.calendar import number_of_days_in_month, format_hour, next_month_repr, next_year
+from parser.calendar import number_of_days_in_month, format_hour, next_month_repr, next_year
 
 
 def test_number_of_days_in_month():

@@ -2,7 +2,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
-from .config_loader import ReportData
+from .config import ReportData
 
 
 def render(data: ReportData, template_path: Path, output_path: Path) -> None:

@@ -1,6 +1,7 @@
 from pytest import fixture
 
-from src.config_loader import Worker, Company, DatesOff, ReportData, load_config
+from parser.config import Worker, Company, DatesOff, ReportData, load_config
+
 
 @fixture
 def worker():

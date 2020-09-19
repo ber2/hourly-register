@@ -2,8 +2,8 @@ from pathlib import Path
 
 from pytest import fixture, raises
 
-from src.config_loader import is_valid_cif, is_valid_dni, is_valid_ss_n, InvalidDocument
-from src.config_loader import Worker, Company, DatesOff, ReportData, load_config
+from parser.config import is_valid_cif, is_valid_dni, is_valid_ss_n, InvalidDocument
+from parser.config import Worker, Company, DatesOff, ReportData, load_config
 
 
 def test_is_valid_dni():
