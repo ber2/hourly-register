@@ -22,7 +22,8 @@ Before going ahead, you should have set:
 - We use [poetry](https://python-poetry.org/) for dependency management.
 - A working LaTeX distribution installed, with access to a `pdflatex` binary in your path. Most of
   the packages we use, such as `graphicx` or `kpfonts`, which should be included in most
-  distributions, such as [TeX Live](https://www.tug.org/texlive/).
+  distributions, such as [TeX Live](https://www.tug.org/texlive/). For instance, on Ubuntu just
+  installing `texlive-base` and `texlive-fonts-extra` will do the work.
 
 Once these are enabled, get the code.
 ```bash
