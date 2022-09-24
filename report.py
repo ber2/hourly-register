@@ -54,7 +54,7 @@ def main(config_file: str, template: str, output: str, upload_to_gdrive: bool) -
 
     if upload_to_gdrive:
         print("Pushing to Google Drive.")
-        push_to_gdrive(output_tex_path)
+        push_to_gdrive(output_pdf_path)
 
     print("All done.")
 
