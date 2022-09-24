@@ -4,6 +4,7 @@ from pathlib import Path
 import click
 
 from parser import load_config, render
+from gdrive import push_to_gdrive
 
 
 @click.command(help="Read config file and output a PDF report")
@@ -25,7 +26,15 @@ from parser import load_config, render
     default="hourly_report.pdf",
     help="Path for the PDF report. The same filename will be used for intermediate TeX files. Defaults to 'hourly_report.pdf'.",
 )
-def main(config_file: str, template: str, output: str) -> None:
+@click.option(
+    "--upload-to-gdrive",
+    "-u",
+    is_flag=True,
+    show_default=True,
+    default=False,
+    help="Enable it to push the output file to Google Drive. You need to configure the application ID and secrets in the `client_secrets.json` file and the folder destination ID in the ",
+)
+def main(config_file: str, template: str, output: str, upload_to_gdrive: bool) -> None:
 
     config_path = Path(config_file)
     template_path = Path(template)
@@ -42,6 +51,10 @@ def main(config_file: str, template: str, output: str) -> None:
 
     print(f"Running pdflatex and saving to {output_pdf_path}.")
     os.system(f"pdflatex --interaction nonstopmode {output_tex_path}")
+
+    if upload_to_gdrive:
+        print("Pushing to Google Drive.")
+        push_to_gdrive(output_tex_path)
 
     print("All done.")
 
