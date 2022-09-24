@@ -1,0 +1,11 @@
+app:
+  destination_folder_id: <your-target-google-drive-folder-id>
+
+client_config_backend: settings
+client_config:
+  client_id: <your-google-drive-api-client-id>
+  client_secret: <your-google-drive-api-client-secret>
+
+save_credentials: True
+save_credentials_backend: file
+save_credentials_file: credentials.json

@@ -131,3 +131,6 @@ dmypy.json
 # LaTeX auxiliary files
 *.aux
 *.out
+
+# Google drive tokens
+credentials.json

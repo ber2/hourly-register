@@ -96,6 +96,21 @@ company:
 The file `signature.png`, also at the repo root, should be modified to contain a 6cm wide, 3cm tall
 picture of a scanned signature.
 
+### Google Drive Upload Configuration
+
+Google Drive uploads require to generate Google Drive API application credentials. To do that, you need to access your Google Cloud account and
+
+1. [Create a Google Cloud project](https://developers.google.com/workspace/guides/create-project) or using an existing one.
+2. [Enable Google Drive API](https://developers.google.com/workspace/guides/enable-apis)
+3. [Create an Oauth Client Credentials](https://developers.google.com/workspace/guides/create-credentials) set for this application. Select `Desktop App` as Application Type.
+4. Download your credentials as JSON and paste your client ID and secret to the project's `client_config.client_id` and `client_config.client_secret` values in the `gdrive_config.yaml` file.
+5. Associate the set of credentials to the Google Drive API in the API's Credentials tab.
+6. If this is the first set of Oauth credentials you create, you will need to configure the `Oauth consent screen`, in the left sidebar.
+
+#### Google Drive Target Folder
+
+Get you [Google Drive folder ID](https://ploi.io/documentation/database/where-do-i-get-google-drive-folder-id) where you want to upload your report to and paste it into the `gdrive_config.yaml` file, in the value `app.destination_folder_id`.
+
 ## Report
 
 `report.py` contains a script which will load an `example.yaml` file, render it into a TeX file,
@@ -120,6 +135,11 @@ Options:
                           used for intermediate TeX files. Defaults to
                           'hourly_report.pdf'.
 
+  -u, --upload-to-gdrive  Enable it to push the output file to Google Drive.
+                          You need to configure the application ID and secrets
+                          in the `client_secrets.json` file and the folder
+                          destination ID in the   [default: False]
+
   --help                  Show this message and exit.
-```
+  ```
 
